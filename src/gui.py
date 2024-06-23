@@ -69,7 +69,10 @@ class App:
 
         self.add_prediction_button = ttk.Button(
             self.choosing_frame, text='Add prediction', command=self.add_new_prediction)
-        self.add_prediction_button.pack(side='left')
+        self.add_prediction_button.pack(side='left', padx=10)
+        self.add_prediction_button = ttk.Button(
+            self.choosing_frame, text='Add game', command=self.add_new_game)
+        self.add_prediction_button.pack(side='left', padx=10)
 
         self.choosing_frame.pack(pady=20, padx=20)
 
@@ -150,9 +153,11 @@ class App:
         away = self.missingi[missing_index][2]
         UpdateResults(self.root, home, away)
 
-
     def add_new_prediction(self):
         NewPrediction(self.root)
+
+    def add_new_game(self):
+        AddGame(self.root)
 
     def run(self):
         self.root.mainloop()
@@ -207,6 +212,35 @@ class NewPrediction(ttk.Toplevel):
         checker = connector.new_predicition(
             who, home, away, home_team, away_team, stage, date
         )
+        if checker:
+            self.errors.set(checker)
+
+
+class AddGame(ttk.Toplevel):
+    def __init__(self, root):
+        self.root = root
+        super().__init__(self.root)
+        self.teams = connector.fetch_teams()
+        self.home_team = tk.StringVar(value=self.teams[0])
+        self.away_team = tk.StringVar(value=self.teams[1])
+        self.date = tk.StringVar(value='2024-06-23')
+
+        self.teams_frame = ttk.Frame(self)
+        ttk.Combobox(self.teams_frame, values=self.teams, textvariable=self.home_team).pack(side='left', padx=40)
+        ttk.Combobox(self.teams_frame, values=self.teams, textvariable=self.away_team).pack(side='left', padx=40)
+        self.teams_frame.pack()
+        self.rest_frame = ttk.Frame(self)
+        self.date_given = ttk.DateEntry(self.rest_frame, dateformat=r"%y-%m-%d")
+        self.date_given.pack(side='left')
+        ttk.Button(self.teams_frame, text='ADD', command=self.add_record).pack(side='left')
+        self.rest_frame.pack()
+        ttk.Label(self, textvariable=self.errors).pack()
+
+    def add_record(self):
+        date = '20' + self.date_given.entry.get()
+        home_team = self.home_team.get()
+        away_team = self.away_team.get()
+        connector.add_new_game_to_db(home_team, away_team, date)
         if checker:
             self.errors.set(checker)
 

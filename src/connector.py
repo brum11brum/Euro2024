@@ -6,6 +6,10 @@ def fetch_teams() -> list[str]:
     return db_operations.teams_list()
 
 
+def add_new_game_to_db(home_team, away_team, result):
+    db_operations.update_game(home_team, away_team, result)
+
+
 def check_missing() -> list[tuple]:
     all_null = db_operations.grab_null()
     date_today = datetime.now().date()
