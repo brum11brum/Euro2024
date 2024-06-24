@@ -1,8 +1,8 @@
 This is a simple app to check how well my brother bet on Euro2024
 
-#python version: 3.10+
+# python version: 3.10+
 
-#Installation
+# Installation
 
 to install dependencies use
 
