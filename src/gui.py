@@ -153,6 +153,7 @@ class App:
         home = self.missingi[missing_index][1]
         away = self.missingi[missing_index][2]
         UpdateResults(self.root, home, away)
+        self.refresh_missing()
 
     def add_new_prediction(self):
         NewPrediction(self.root)
@@ -183,8 +184,10 @@ class NewPrediction(ttk.Toplevel):
         self.results_frame = ttk.Frame(self)
         self.home_goals = ttk.Spinbox(self.results_frame, from_=0, to=40)
         self.home_goals.pack(side='left', padx=40)
+        self.home_goals.set(0)
         self.away_goals = ttk.Spinbox(self.results_frame, from_=0, to=40)
         self.away_goals.pack(side='left', padx=40)
+        self.away_goals.set(0)
         self.results_frame.pack()
         self.rest_frame = ttk.Frame(self)
         self.date_given = ttk.DateEntry(self.rest_frame, dateformat=r"%y-%m-%d")
@@ -192,6 +195,7 @@ class NewPrediction(ttk.Toplevel):
         ttk.Label(self.rest_frame, text="faza:").pack(side='left')
         self.stage = ttk.Spinbox(self.rest_frame, from_=1, to=7)
         self.stage.pack(side='left')
+        self.stage.set(1)
         self.whoisresponsible = ttk.Combobox(self.rest_frame, values=self.guys, textvariable=self.better)
         self.whoisresponsible.pack()
         self.rest_frame.pack()
@@ -226,6 +230,7 @@ class AddGame(ttk.Toplevel):
         self.home_team = tk.StringVar(value=self.teams[0])
         self.away_team = tk.StringVar(value=self.teams[1])
         self.date = tk.StringVar(value='2024-06-23')
+        self.errors = tk.StringVar(value='')
 
         self.teams_frame = ttk.Frame(self)
         ttk.Combobox(self.teams_frame, values=self.teams, textvariable=self.home_team).pack(side='left', padx=40)
@@ -264,15 +269,18 @@ class UpdateResults(ttk.Toplevel):
         ttk.Label(self.home_frame, text=home_team).pack(side='left')
         self.home_goals = ttk.Spinbox(self.home_frame, from_=0, to=40)
         self.home_goals.pack(side='left', padx=40)
-        self.home_frame.pack()
+        self.home_frame.pack(pady=10)
+        self.home_goals.set(0)
 
         self.away_frame = ttk.Frame(self)
         ttk.Label(self.away_frame, text=away_team).pack(side='left')
-        self.away_goals = ttk.Spinbox(self.home_frame, from_=0, to=40)
+        self.away_goals = ttk.Spinbox(self.away_frame, from_=0, to=40)
         self.away_goals.pack(side='left', padx=40)
-        self.away_frame.pack()
+        self.away_frame.pack(pady=10)
+        self.away_goals.set(0)
 
-        ttk.Button(self, text='aktualizuj', command=self.update_record).pack()
+        ttk.Button(self, text='aktualizuj', command=self.update_record).pack(pady=20)
 
     def update_record(self):
         connector.update_old_game(self.home_team, self.away_team, self.home_goals.get(), self.away_goals.get())
+        self.destroy()
