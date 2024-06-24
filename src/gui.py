@@ -7,9 +7,10 @@ from src import connector
 
 class App:
     def __init__(self):
-        self.root = ttk.Window()
+        self.root = ttk.Window(themename='superhero')
         self.root.geometry('1200x800')
         self.root.title('Am I THAT good')
+        self.root.iconbitmap('gronkjer_profile.ico')
 
         self.guys_list = [
             'Both',
@@ -77,7 +78,7 @@ class App:
         self.choosing_frame.pack(pady=20, padx=20)
 
         self.missing_frame = ttk.Frame(self.root)
-        self.missing_display = ttk.Treeview(self.missing_frame, columns=['game', 'date'], show='headings')
+        self.missing_display = ttk.Treeview(self.missing_frame, columns=['game', 'date'], show='headings', height=5)
         self.missing_display.heading('game', text='game')
         self.missing_display.heading('date', text='date')
         self.missing_display.pack(side='left')
@@ -89,13 +90,13 @@ class App:
 
         self.bottom_frame = ttk.Frame(self.root)
         self.left_results = ttk.Frame(self.bottom_frame)
-        self.predictions_display = ttk.Treeview(self.left_results, columns=['game', 'predicted', 'actual', 'hit'], show='headings')
+        self.predictions_display = ttk.Treeview(self.left_results, columns=['game', 'predicted', 'actual', 'hit'], show='headings', height=40)
         self.predictions_display.heading('game', text='game')
         self.predictions_display.heading('predicted', text='predicted')
         self.predictions_display.heading('actual', text='actual')
         self.predictions_display.heading('hit', text='hit')
         self.predictions_display.pack(side='left')
-        self.left_results.pack(side='left', expand=True, fill='both')
+        self.left_results.pack(side='left', expand=True, fill='both', padx=40, pady=40)
         self.right_results = ttk.Frame(self.bottom_frame)
         ttk.Label(
             self.right_results,
