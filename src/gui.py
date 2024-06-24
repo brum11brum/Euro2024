@@ -35,7 +35,7 @@ class App:
         self.name_box.pack(side='left')
         self.name_box.bind('<<ComboboxSelected>>', self.refresh_results)
         self.stages_frame = ttk.Frame(self.choosing_frame)
-        ttk.Label(self.stages_frame, text='Stage:').pack(side='left')
+        ttk.Label(self.stages_frame, text='Faza:').pack(side='left')
         self.stage1_check = ttk.Checkbutton(
             self.stages_frame, text='1', variable=self.stage1, onvalue=True, offvalue=False,
             command=self.refresh_results)
@@ -69,10 +69,10 @@ class App:
         self.stages_frame.pack(side='left', padx=80)
 
         self.add_prediction_button = ttk.Button(
-            self.choosing_frame, text='Add prediction', command=self.add_new_prediction)
+            self.choosing_frame, text='Dodaj typ', command=self.add_new_prediction)
         self.add_prediction_button.pack(side='left', padx=10)
         self.add_prediction_button = ttk.Button(
-            self.choosing_frame, text='Add game', command=self.add_new_game)
+            self.choosing_frame, text='Dodaj mecz', command=self.add_new_game)
         self.add_prediction_button.pack(side='left', padx=10)
 
         self.choosing_frame.pack(pady=20, padx=20)
@@ -83,8 +83,8 @@ class App:
         self.missing_display.heading('date', text='date')
         self.missing_display.pack(side='left')
         self.missing_buttons = ttk.Frame(self.missing_frame)
-        ttk.Button(self.missing_buttons, text='add results', command=self.add_results).pack(pady=10)
-        ttk.Button(self.missing_buttons, text='refresh', command=self.refresh_missing).pack(pady=10)
+        ttk.Button(self.missing_buttons, text='dodaj wynik', command=self.add_results).pack(pady=10)
+        ttk.Button(self.missing_buttons, text='odśwież', command=self.refresh_missing).pack(pady=10)
         self.missing_buttons.pack(side='left', padx=40)
         self.missing_frame.pack()
 
@@ -194,7 +194,7 @@ class NewPrediction(ttk.Toplevel):
         self.whoisresponsible = ttk.Combobox(self.rest_frame, values=self.guys, textvariable=self.better)
         self.whoisresponsible.pack()
         self.rest_frame.pack()
-        ttk.Button(self, text='ADD', command=self.add_record).pack(side='left')
+        ttk.Button(self, text='DODAJ DO BAZY', command=self.add_record).pack(side='left')
         ttk.Label(self, textvariable=self.errors).pack()
 
     def add_record(self):
@@ -207,7 +207,7 @@ class NewPrediction(ttk.Toplevel):
         try:
             stage = int(stage_str)
         except ValueError:
-            self.errors.set('Something wrong with stage parameter')
+            self.errors.set('Coś nie tak z fazą')
             return
         who = self.better.get()
         checker = connector.new_predicition(
@@ -233,7 +233,7 @@ class AddGame(ttk.Toplevel):
         self.rest_frame = ttk.Frame(self)
         self.date_given = ttk.DateEntry(self.rest_frame, dateformat=r"%y-%m-%d")
         self.date_given.pack(side='left')
-        ttk.Button(self.teams_frame, text='ADD', command=self.add_record).pack(side='left')
+        ttk.Button(self.teams_frame, text='DODAJ DO BAZY', command=self.add_record).pack(side='left')
         self.rest_frame.pack()
         ttk.Label(self, textvariable=self.errors).pack()
 
@@ -271,7 +271,7 @@ class UpdateResults(ttk.Toplevel):
         self.away_goals.pack(side='left', padx=40)
         self.away_frame.pack()
 
-        ttk.Button(self, text='update', command=self.update_record).pack()
+        ttk.Button(self, text='aktualizuj', command=self.update_record).pack()
 
     def update_record(self):
         connector.update_old_game(self.home_team, self.away_team, self.home_goals.get(), self.away_goals.get())
