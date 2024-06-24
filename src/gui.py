@@ -189,6 +189,7 @@ class NewPrediction(ttk.Toplevel):
         self.rest_frame = ttk.Frame(self)
         self.date_given = ttk.DateEntry(self.rest_frame, dateformat=r"%y-%m-%d")
         self.date_given.pack(side='left')
+        ttk.Label(self.rest_frame, text="faza:").pack(side='left')
         self.stage = ttk.Spinbox(self.rest_frame, from_=1, to=7)
         self.stage.pack(side='left')
         self.whoisresponsible = ttk.Combobox(self.rest_frame, values=self.guys, textvariable=self.better)
