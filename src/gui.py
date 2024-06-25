@@ -30,6 +30,10 @@ class App:
         self.missingi = []
         self.percentage = ttk.StringVar(value='0%')
 
+        self.home_stats_var = tk.StringVar(value='0/0')
+        self.away_stats_var = tk.StringVar(value='0/0')
+        self.draws_stats_var = tk.StringVar(value='0/0')
+
         self.choosing_frame = ttk.Frame(self.root)
         self.name_box = ttk.Combobox(self.choosing_frame, values=self.guys_list, textvariable=self.name)
         self.name_box.pack(side='left')
@@ -96,15 +100,29 @@ class App:
         self.predictions_display.heading('actual', text='actual')
         self.predictions_display.heading('hit', text='hit')
         self.predictions_display.pack(side='left')
-        self.left_results.pack(side='left', expand=True, fill='both', padx=40, pady=40)
+        self.left_results.pack(side='left', expand=True, fill='both')
         self.right_results = ttk.Frame(self.bottom_frame)
         ttk.Label(
             self.right_results,
             textvariable=self.percentage,
             font=('Ariel', 48)
-        ).pack(ipady=150, ipadx=150)
+        ).pack(ipady=150, ipadx=150, expand=True, fill='both')
+        self.additional_stats_frame = ttk.Frame(self.right_results)
+        self.home_stats = ttk.Frame(self.additional_stats_frame)
+        ttk.Label(self.home_stats, text="home: ").pack(side='left')
+        ttk.Label(self.home_stats, textvariable=self.home_stats_var).pack(side='left')
+        self.home_stats.pack()
+        self.away_stats = ttk.Frame(self.additional_stats_frame)
+        ttk.Label(self.away_stats, text="away: ").pack(side='left')
+        ttk.Label(self.away_stats, textvariable=self.away_stats_var).pack(side='left')
+        self.away_stats.pack()
+        self.draws_stats = ttk.Frame(self.additional_stats_frame)
+        ttk.Label(self.draws_stats, text="draws: ").pack(side='left')
+        ttk.Label(self.draws_stats, textvariable=self.draws_stats_var).pack(side='left')
+        self.draws_stats.pack()
+        self.additional_stats_frame.pack()
         self.right_results.pack(side='left', expand=True, fill='both')
-        self.bottom_frame.pack(expand=True, fill='both')
+        self.bottom_frame.pack(expand=True, fill='both', padx=40, pady=40)
 
         self.refresh_missing()
         self.refresh_results()
@@ -120,6 +138,14 @@ class App:
         self.predictions_display.delete(*self.predictions_display.get_children())
         for item in results:
             self.predictions_display.insert('', tk.END, values=item)
+
+    def set_additional_stats(self, additional_stats: dict) -> None:
+        home_res = f"{additional_stats['hits']['home']}/{additional_stats['miss']['home']}"
+        away_res = f"{additional_stats['hits']['away']}/{additional_stats['miss']['away']}"
+        draws_res = f"{additional_stats['hits']['draw']}/{additional_stats['miss']['draw']}"
+        self.home_stats_var.set(home_res)
+        self.away_stats_var.set(away_res)
+        self.draws_stats_var.set(draws_res)
 
     def refresh_results(self, event=None):
         name = self.name.get()
@@ -138,12 +164,15 @@ class App:
             stage.append('6')
         if self.stage7.get():
             stage.append('7')
-        results = connector.show_results(name, stage)
-        count_hits: int = 0
+        results, additional_stats = connector.show_results(name, stage)
+        self.set_additional_stats(additional_stats)
+        count_hits: int = (additional_stats['hits']['home'] +
+                           additional_stats['hits']['away'] +
+                           additional_stats['hits']['draw'])
         self.get_table_predictions(results)
-        for result in results:
-            if result[-1]:
-                count_hits += 1
+        # for result in results:
+        #     if result[-1]:
+        #         count_hits += 1
         if results:
             percentage = f"{(count_hits/len(results))*100:.2f}%"
             self.percentage.set(percentage)
