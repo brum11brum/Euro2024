@@ -6,8 +6,8 @@ def fetch_teams() -> list[str]:
     return db_operations.teams_list()
 
 
-def add_new_game_to_db(home_team, away_team, result):
-    db_operations.update_game(home_team, away_team, result)
+def add_new_game_to_db(home_team, away_team, date):
+    db_operations.insert_game(home_team, away_team, date)
 
 
 def check_missing() -> list[tuple]:

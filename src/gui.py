@@ -182,7 +182,7 @@ class App:
         values = self.missing_display.item(miss_ind)['values'][0].split('-')
         home, away = values
         UpdateResults(self.root, home, away)
-        self.refresh_missing()
+        # self.refresh_missing()
 
     def add_new_prediction(self):
         NewPrediction(self.root)
@@ -276,9 +276,11 @@ class AddGame(ttk.Toplevel):
         date = '20' + self.date_given.entry.get()
         home_team = self.home_team.get()
         away_team = self.away_team.get()
-        connector.add_new_game_to_db(home_team, away_team, date)
+        checker = connector.add_new_game_to_db(home_team, away_team, date)
         if checker:
             self.errors.set(checker)
+        else:
+            self.errors.set(f"added {home_team}-{away_team} to database")
 
 
 class UpdateResults(ttk.Toplevel):
@@ -312,4 +314,5 @@ class UpdateResults(ttk.Toplevel):
 
     def update_record(self):
         connector.update_old_game(self.home_team, self.away_team, self.home_goals.get(), self.away_goals.get())
+        self.root.refresh_missing()
         self.destroy()
