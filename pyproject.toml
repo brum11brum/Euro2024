@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "euro2024"
-version = "1.0.0"
+version = "1.0.1"
 description = ""
 authors = ["astralopitek <marcinloboda11@gmail.com>"]
 readme = "README.md"

@@ -178,9 +178,9 @@ class App:
             self.percentage.set(percentage)
 
     def add_results(self):
-        missing_index = int(self.missing_display.selection()[0][1:]) - 1
-        home = self.missingi[missing_index][1]
-        away = self.missingi[missing_index][2]
+        miss_ind = self.missing_display.selection()[0]
+        values = self.missing_display.item(miss_ind)['values'][0].split('-')
+        home, away = values
         UpdateResults(self.root, home, away)
         self.refresh_missing()
 
