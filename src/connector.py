@@ -29,6 +29,7 @@ def new_predicition(
         home_team: str,
         away_team: str,
         stage: int,
+        event=None
 ) -> str:
     result = f"{home_goals}-{away_goals}"
     game_id = db_operations.get_game_id(home_team, away_team)
