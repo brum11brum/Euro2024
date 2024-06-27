@@ -170,9 +170,7 @@ class App:
                            additional_stats['hits']['away'] +
                            additional_stats['hits']['draw'])
         self.get_table_predictions(results)
-        # for result in results:
-        #     if result[-1]:
-        #         count_hits += 1
+
         if results:
             percentage = f"{(count_hits/len(results))*100:.2f}%"
             self.percentage.set(percentage)
