@@ -33,6 +33,7 @@ class App:
         self.home_stats_var = tk.StringVar(value='0/0')
         self.away_stats_var = tk.StringVar(value='0/0')
         self.draws_stats_var = tk.StringVar(value='0/0')
+        self.exact_results_stats_var = tk.StringVar(value='0/0')
 
         self.choosing_frame = ttk.Frame(self.root)
         self.name_box = ttk.Combobox(self.choosing_frame, values=self.guys_list, textvariable=self.name)
@@ -120,6 +121,10 @@ class App:
         ttk.Label(self.draws_stats, text="draws: ").pack(side='left')
         ttk.Label(self.draws_stats, textvariable=self.draws_stats_var).pack(side='left')
         self.draws_stats.pack()
+        self.exact_results_stats = ttk.Frame(self.additional_stats_frame)
+        ttk.Label(self.exact_results_stats, text="exact: ").pack(side='left')
+        ttk.Label(self.exact_results_stats, textvariable=self.exact_results_stats_var).pack(side='left')
+        self.exact_results_stats.pack()
         self.additional_stats_frame.pack()
         self.right_results.pack(side='left', expand=True, fill='both')
         self.bottom_frame.pack(expand=True, fill='both', padx=40, pady=40)
@@ -143,9 +148,11 @@ class App:
         home_res = f"{additional_stats['hits']['home']}/{additional_stats['miss']['home']}"
         away_res = f"{additional_stats['hits']['away']}/{additional_stats['miss']['away']}"
         draws_res = f"{additional_stats['hits']['draw']}/{additional_stats['miss']['draw']}"
+        exact_results_res = f"{additional_stats['hits']['exact_result']}/{additional_stats['miss']['exact_result']}"
         self.home_stats_var.set(home_res)
         self.away_stats_var.set(away_res)
         self.draws_stats_var.set(draws_res)
+        self.exact_results_stats_var.set(exact_results_res)
 
     def refresh_results(self, event=None):
         name = self.name.get()

@@ -69,8 +69,8 @@ def compare_results(predicted: str, actual: str) -> tuple[bool, str, str]:
 def show_results(name: str, stage: list[str]) -> tuple[list[tuple], dict]:
     results: list = []
     additional_stats: dict = {
-        'hits': {'home': 0, 'away': 0, 'draw': 0},
-        'miss': {'home': 0, 'away': 0, 'draw': 0}
+        'hits': {'home': 0, 'away': 0, 'draw': 0,'exact_result': 0},
+        'miss': {'home': 0, 'away': 0, 'draw': 0, 'exact_result': 0}
     }
     predictions = db_operations.get_predictions(name)
     for prediction in predictions:
@@ -79,6 +79,10 @@ def show_results(name: str, stage: list[str]) -> tuple[list[tuple], dict]:
         predicted_result = prediction[3]
         actual_from_db = db_operations.get_game_by_id(prediction[2])
         actual_result = actual_from_db[4]
+        if predicted_result == actual_result:
+            additional_stats['hits']['exact_result'] += 1
+        else:
+            additional_stats['miss']['exact_result'] += 1
         if not actual_result:
             continue
         hit, predicted_win, actual_win = compare_results(predicted_result, actual_result)
