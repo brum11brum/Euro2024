@@ -79,12 +79,12 @@ def show_results(name: str, stage: list[str]) -> tuple[list[tuple], dict]:
         predicted_result = prediction[3]
         actual_from_db = db_operations.get_game_by_id(prediction[2])
         actual_result = actual_from_db[4]
+        if not actual_result:
+            continue
         if predicted_result == actual_result:
             additional_stats['hits']['exact_result'] += 1
         else:
             additional_stats['miss']['exact_result'] += 1
-        if not actual_result:
-            continue
         hit, predicted_win, actual_win = compare_results(predicted_result, actual_result)
         if hit:
             additional_stats['hits'][predicted_win] += 1
